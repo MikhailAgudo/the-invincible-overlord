@@ -10,7 +10,7 @@ using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace the_invincible_overlord.Components {
     class Entity {
-        Point Position;
+        public Point Position;
         Cell Char;
         bool Player;
 
@@ -22,6 +22,18 @@ namespace the_invincible_overlord.Components {
 
         public void Move(Point destination) {
             this.Position += destination;
+        }
+
+        public Cell GetCell() {
+            return this.Char;
+        }
+
+        public bool GetPlayer() {
+            return this.Player;
+        }
+
+        public Point GetPosition() {
+            return this.Position;
         }
     }
 }

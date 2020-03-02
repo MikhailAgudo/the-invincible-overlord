@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using SadConsole;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
-using Colors = Microsoft.Xna.Framework.Color;
 using Microsoft.Xna.Framework.Graphics;
+using Colors = Microsoft.Xna.Framework.Color;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace the_invincible_overlord {
     class Engine {
