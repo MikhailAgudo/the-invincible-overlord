@@ -94,13 +94,5 @@ namespace the_invincible_overlord {
                 player.MoveBy(new Point(1, 0));
             }
         }
-
-        public static bool isTileWalkable(Point location) {
-            if (location.X < 0 || location.Y < 0 || location.X >= Width || location.Y >= Height) {
-                return false;
-            }
-
-            return !_tiles[location.Y * Width + location.X].IsBlockingMove;
-        }
     }
 }
