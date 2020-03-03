@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 namespace the_invincible_overlord.Tiles {
     public abstract class TileBase : Cell {
         // Movement and LOS Flags
-        protected bool IsBlockingMove;
-        protected bool IsBlockingLOS;
+        public bool IsBlockingMove;
+        public bool IsBlockingLOS;
 
         // Tile's Name
         protected string Name;

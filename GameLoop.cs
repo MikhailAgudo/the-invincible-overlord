@@ -9,7 +9,7 @@ namespace the_invincible_overlord {
         public const int Width = 80;
         public const int Height = 25;
         //static Engine MainEngine = new Engine(Width, Height);
-        private static SadConsole.Entities.Entity player;
+        private static Entities.Player player;
         private static Tiles.TileBase[] _tiles;
         private const int _roomWidth = 10;
         private const int _roomHeight = 20;
@@ -30,16 +30,7 @@ namespace the_invincible_overlord {
 
         private static void Update(GameTime time) {
             // Called each logic update
-
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W)) {
-                player.Position += new Point(0, -1);
-            } else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S)) {
-                player.Position += new Point(0, 1);
-            } else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A)) {
-                player.Position += new Point(-1, 0);
-            } else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D)) {
-                player.Position += new Point(1, 0);
-            }
+            CheckKeyboard();
         }
 
         private static void Init() {
@@ -64,10 +55,8 @@ namespace the_invincible_overlord {
         //}
 
         private static void CreatePlayer() {
-            player = new SadConsole.Entities.Entity(1, 1);
-            player.Animation.CurrentFrame[0].Glyph = '@';
-            player.Animation.CurrentFrame[0].Foreground = Color.HotPink;
-            player.Position = new Point(20, 10);
+            player = new Entities.Player(Color.Yellow, Color.Transparent);
+            player.Position = new Point(5, 5);
         }
 
         private static void CreateFloors() {
@@ -84,6 +73,34 @@ namespace the_invincible_overlord {
             for(int i = 0; i < _tiles.Length; i++) {
                 _tiles[i] = new Tiles.TileWall();
             }
+        }
+
+        private static void CheckKeyboard() {
+            // F5 to make fullscreen
+            if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.F5)) {
+                SadConsole.Settings.ToggleFullScreen();
+            }
+            
+            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W)) {
+                player.MoveBy(new Point(0, -1));
+            }
+            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S)) {
+                player.MoveBy(new Point(0, 1));
+            }
+            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A)) {
+                player.MoveBy(new Point(-1, 0));
+            }
+            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D)) {
+                player.MoveBy(new Point(1, 0));
+            }
+        }
+
+        public static bool isTileWalkable(Point location) {
+            if (location.X < 0 || location.Y < 0 || location.X >= Width || location.Y >= Height) {
+                return false;
+            }
+
+            return !_tiles[location.Y * Width + location.X].IsBlockingMove;
         }
     }
 }
