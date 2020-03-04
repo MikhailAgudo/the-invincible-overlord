@@ -7,23 +7,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace the_invincible_overlord {
     class GameLoop {
-        public const int Width = 80;
-        public const int Height = 25;
-        //static Engine MainEngine = new Engine(Width, Height);
-        private static Entities.Player player;
+        public const int GameWidth = 80;
+        public const int GameHeight = 25;
 
-        public static Map GameMap;
-        private static int _mapWidth = 100;
-        private static int _mapHeight = 100;
-        private static int _maxRooms = 500;
-        private static int _minRoomSize = 4;
-        private static int _maxRoomSize = 15;
-
-        private static ScrollingConsole startingConsole;
+        // # The manager stuff
+        public static UI.UIManager UIManager;
+        public static World World;
 
         static void Main() {
             // Setup the engine and create the main window.
-            SadConsole.Game.Create(Width, Height);
+            SadConsole.Game.Create(GameWidth, GameHeight);
 
             // Hook the start event so we can add consoles to the system.
             SadConsole.Game.OnInitialize = Init;
@@ -36,74 +29,18 @@ namespace the_invincible_overlord {
         }
 
         private static void Update(GameTime time) {
-            // Called each logic update
-            CheckKeyboard();
+
         }
 
         private static void Init() {
-            // # Initialize new game map
-            GameMap = new Map(_mapWidth, _mapHeight);
+            // # Instantiate the UIManager
+            UIManager = new UI.UIManager();
 
-            // # Instantiate a new generator
-            MapGenerator mapGen = new MapGenerator();
-            GameMap = mapGen.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
+            // # Make a new World
+            World = new World();
 
-            //Console startingConsole = new Console(Width, Height);
-            startingConsole = new ScrollingConsole(GameMap.Width, 
-                GameMap.Height, 
-                Global.FontDefault, 
-                new Rectangle(0, 0, Width, Height),
-                GameMap.MapTiles);
-            SadConsole.Global.CurrentScreen = startingConsole;
+            UIManager.Init();
 
-            CreatePlayer();
-
-            // # Put some view thing on the player
-            player.Components.Add(new EntityViewSyncComponent());
-            // # Limit the console's dimensions by these values
-            // startingConsole.ViewPort = new Rectangle(0, 0, Width - 10, Height - 10);
-
-            startingConsole.Children.Add(player);
-        }
-
-        // # Old INit
-        //private static void Init() {
-        //    MainEngine.Main();
-        //    SadConsole.Global.CurrentScreen = MainEngine.GetMap(0);
-        //    Global.CurrentScreen.IsFocused = true;
-        //}
-
-        private static void CreatePlayer() {
-            player = new Entities.Player(Color.Yellow, Color.Transparent);
-            player.Position = new Point(5, 5);
-        }
-
-        private static void CheckKeyboard() {
-            // F5 to make fullscreen
-            if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.F5)) {
-                SadConsole.Settings.ToggleFullScreen();
-            }
-            
-            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W)) {
-                player.MoveBy(new Point(0, -1));
-                CenterOnActor(player);
-            }
-            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S)) {
-                player.MoveBy(new Point(0, 1));
-                CenterOnActor(player);
-            }
-            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A)) {
-                player.MoveBy(new Point(-1, 0));
-                CenterOnActor(player);
-            }
-            else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D)) {
-                player.MoveBy(new Point(1, 0));
-                CenterOnActor(player);
-            }
-        }
-
-        public static void CenterOnActor(Entities.Actor actor) {
-            startingConsole.CenterViewPortOnPoint(actor.Position);
         }
     }
 }

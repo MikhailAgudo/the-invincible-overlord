@@ -57,9 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Entity.cs" />
-    <Compile Include="Components\Map.cs" />
-    <Compile Include="Engine.cs" />
     <Compile Include="Entities\Actor.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameLoop.cs" />
@@ -69,6 +66,8 @@
     <Compile Include="Tiles\TileBase.cs" />
     <Compile Include="Tiles\TileFloor.cs" />
     <Compile Include="Tiles\TileWall.cs" />
+    <Compile Include="UI\UIManager.cs" />
+    <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
