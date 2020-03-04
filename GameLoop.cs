@@ -1,5 +1,6 @@
 ﻿using System;
 using SadConsole;
+using SadConsole.Components;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,8 @@ namespace the_invincible_overlord {
         private static int _maxRooms = 500;
         private static int _minRoomSize = 4;
         private static int _maxRoomSize = 15;
+
+        private static ScrollingConsole startingConsole;
 
         static void Main() {
             // Setup the engine and create the main window.
@@ -46,13 +49,20 @@ namespace the_invincible_overlord {
             GameMap = mapGen.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
 
             //Console startingConsole = new Console(Width, Height);
-            Console startingConsole = new ScrollingConsole(GameMap.Width, 
+            startingConsole = new ScrollingConsole(GameMap.Width, 
                 GameMap.Height, 
                 Global.FontDefault, 
                 new Rectangle(0, 0, Width, Height),
                 GameMap.MapTiles);
             SadConsole.Global.CurrentScreen = startingConsole;
+
             CreatePlayer();
+
+            // # Put some view thing on the player
+            player.Components.Add(new EntityViewSyncComponent());
+            // # Limit the console's dimensions by these values
+            // startingConsole.ViewPort = new Rectangle(0, 0, Width - 10, Height - 10);
+
             startingConsole.Children.Add(player);
         }
 
@@ -76,16 +86,24 @@ namespace the_invincible_overlord {
             
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W)) {
                 player.MoveBy(new Point(0, -1));
+                CenterOnActor(player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S)) {
                 player.MoveBy(new Point(0, 1));
+                CenterOnActor(player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A)) {
                 player.MoveBy(new Point(-1, 0));
+                CenterOnActor(player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D)) {
                 player.MoveBy(new Point(1, 0));
+                CenterOnActor(player);
             }
+        }
+
+        public static void CenterOnActor(Entities.Actor actor) {
+            startingConsole.CenterViewPortOnPoint(actor.Position);
         }
     }
 }

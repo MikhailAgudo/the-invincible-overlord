@@ -57,6 +57,22 @@ namespace the_invincible_overlord {
                 CreateRoom(room);
             }
 
+            for (int r = 1; r < Rooms.Count; r++) {
+                // # Make tunnels between all rooms
+                // # For all remaining rooms, get the center of each room and the previous room
+                Point previousRoomCenter = Rooms[r - 1].Center;
+                Point currentRoomCenter = Rooms[r].Center;
+
+                // # 50% chance of which direction the "L" shape will go
+                if (randNum.Next(1, 2) == 1) {
+                    CreateHorizontalTunnel(previousRoomCenter.X, currentRoomCenter.X, previousRoomCenter.Y);
+                    CreateVerticalTunnel(previousRoomCenter.Y, currentRoomCenter.Y, currentRoomCenter.X);
+                } else {
+                    CreateHorizontalTunnel(previousRoomCenter.Y, currentRoomCenter.Y, previousRoomCenter.X);
+                    CreateVerticalTunnel(previousRoomCenter.X, currentRoomCenter.X, currentRoomCenter.Y);
+                }
+            }
+
             return _map;
         }
 
@@ -79,6 +95,18 @@ namespace the_invincible_overlord {
 
         private void CreateWall(Point location) {
             _map.MapTiles[location.ToIndex(_map.Width)] = new Tiles.TileWall();
+        }
+
+        private void CreateHorizontalTunnel(int xStart, int xEnd, int yPosition) {
+            for (int x = Math.Min(xStart, xEnd); x <= Math.Max(xStart, xEnd); x++) {
+                CreateFloor(new Point(x, yPosition));
+            }
+        }
+
+        private void CreateVerticalTunnel(int yStart, int yEnd, int xPosition) {
+            for (int y = Math.Min(yStart, yEnd); y <= Math.Max(yStart, yEnd); y++) {
+                CreateFloor(new Point(xPosition, y));
+            }
         }
 
         private void FloodWalls() {
