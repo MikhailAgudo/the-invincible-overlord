@@ -8,7 +8,7 @@ namespace the_invincible_overlord {
         private int _width;
         private int _height;
 
-        public Tiles.TileBase[] Tiles {
+        public Tiles.TileBase[] MapTiles {
             get => _tiles;
             set {
                 _tiles = value;
@@ -30,7 +30,7 @@ namespace the_invincible_overlord {
         public Map(int width, int height) {
             _width = width;
             _height = height;
-            Tiles = new Tiles.TileBase[width * height];
+            MapTiles = new Tiles.TileBase[width * height];
         }
 
         public bool IsTileWalkable(Point location) {

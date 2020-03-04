@@ -10,9 +10,13 @@ namespace the_invincible_overlord {
         public const int Height = 25;
         //static Engine MainEngine = new Engine(Width, Height);
         private static Entities.Player player;
-        private static Tiles.TileBase[] _tiles;
-        private const int _roomWidth = 10;
-        private const int _roomHeight = 20;
+
+        public static Map GameMap;
+        private static int _mapWidth = 100;
+        private static int _mapHeight = 100;
+        private static int _maxRooms = 500;
+        private static int _minRoomSize = 4;
+        private static int _maxRoomSize = 15;
 
         static void Main() {
             // Setup the engine and create the main window.
@@ -34,14 +38,19 @@ namespace the_invincible_overlord {
         }
 
         private static void Init() {
-            CreateWalls();
-            CreateFloors();
+            // # Initialize new game map
+            GameMap = new Map(_mapWidth, _mapHeight);
+
+            // # Instantiate a new generator
+            MapGenerator mapGen = new MapGenerator();
+            GameMap = mapGen.GenerateMap(_mapWidth, _mapHeight, _maxRooms, _minRoomSize, _maxRoomSize);
+
             //Console startingConsole = new Console(Width, Height);
-            Console startingConsole = new ScrollingConsole(Width, 
-                Height, 
+            Console startingConsole = new ScrollingConsole(GameMap.Width, 
+                GameMap.Height, 
                 Global.FontDefault, 
                 new Rectangle(0, 0, Width, Height),
-                _tiles);
+                GameMap.MapTiles);
             SadConsole.Global.CurrentScreen = startingConsole;
             CreatePlayer();
             startingConsole.Children.Add(player);
@@ -57,22 +66,6 @@ namespace the_invincible_overlord {
         private static void CreatePlayer() {
             player = new Entities.Player(Color.Yellow, Color.Transparent);
             player.Position = new Point(5, 5);
-        }
-
-        private static void CreateFloors() {
-            for (int x = 0; x < _roomWidth; x++) {
-                for (int y = 0; y < _roomHeight; y++) {
-                    _tiles[y * Width + x] = new Tiles.TileFloor();
-                }
-            }
-        }
-
-        private static void CreateWalls() {
-            _tiles = new Tiles.TileBase[Width * Height];
-
-            for(int i = 0; i < _tiles.Length; i++) {
-                _tiles[i] = new Tiles.TileWall();
-            }
         }
 
         private static void CheckKeyboard() {

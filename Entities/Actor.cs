@@ -31,7 +31,7 @@ namespace the_invincible_overlord.Entities {
         public bool MoveBy(Point positionChange) {
             // # the actor moves by positionChange tiles in any direction
             // # return true if actor was able to move, false if failed to move
-            if(the_invincible_overlord.GameLoop.isTileWalkable(Position + positionChange)) {
+            if(GameLoop.GameMap.IsTileWalkable(Position + positionChange)) {
                 Position += positionChange;
                 return true;
             }
