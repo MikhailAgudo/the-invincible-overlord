@@ -9,6 +9,7 @@ namespace the_invincible_overlord.UI {
         // # makes consoles very easily addressable
         public ScrollingConsole MapConsole;
         public Window MapWindow;
+        public MessageLogWindow MessageLog;
 
         public UIManager() {
             // # Must be set to true, because this console will be the console we need to see
@@ -35,6 +36,37 @@ namespace the_invincible_overlord.UI {
         public void Init() {
             CreateConsoles();
             CreateMapWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Game Map");
+
+            MessageLog = new MessageLogWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Message Log");
+            Children.Add(MessageLog);
+            MessageLog.Show();
+            MessageLog.Position = new Point(0, GameLoop.GameHeight / 2);
+
+            MessageLog.Add("Testing 123");
+            MessageLog.Add("Testing 1123123312");
+            MessageLog.Add("Testing 69");
+            MessageLog.Add("Testing 420");
+            MessageLog.Add("Testing 420 blazeit");
+            MessageLog.Add("Testing 123");
+            MessageLog.Add("Testing 1123123312");
+            MessageLog.Add("Testing 69");
+            MessageLog.Add("Testing 420");
+            MessageLog.Add("Testing 420 blazeit");
+            MessageLog.Add("Testing 123");
+            MessageLog.Add("Testing 1123123312");
+            MessageLog.Add("Testing 69");
+            MessageLog.Add("Testing 420");
+            MessageLog.Add("Testing 420 blazeit");
+            MessageLog.Add("Testing 123");
+            MessageLog.Add("Testing 1123123312");
+            MessageLog.Add("Testing 69");
+            MessageLog.Add("Testing 420");
+            MessageLog.Add("Testing 420 blazeit");
+            MessageLog.Add("Testing 123");
+            MessageLog.Add("Testing 1123123312");
+            MessageLog.Add("Testing 69");
+            MessageLog.Add("Testing 420");
+            MessageLog.Add("Testing 420 blazeit");
         }
 
         public void CreateConsoles() {
