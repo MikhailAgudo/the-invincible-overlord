@@ -12,6 +12,7 @@ namespace the_invincible_overlord {
 
         // # The manager stuff
         public static UI.UIManager UIManager;
+        public static Commands.CommandManager CommandManager;
         public static World World;
 
         static void Main() {
@@ -35,6 +36,9 @@ namespace the_invincible_overlord {
         private static void Init() {
             // # Instantiate the UIManager
             UIManager = new UI.UIManager();
+
+            // # Instantiate the CommandManager
+            CommandManager = new Commands.CommandManager();
 
             // # Make a new World
             World = new World();

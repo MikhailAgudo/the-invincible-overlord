@@ -37,9 +37,15 @@ namespace the_invincible_overlord {
 
         private void CreatePlayer() {
             Player = new Entities.Player(Color.Yellow, Color.Transparent);
-            Player.Position = new Point(5, 5);
 
-            // # Put in a component that allows viewport stuff to work
+            // # Put the player on the first non-blocking tile
+            for (int i = 0; i < CurrentMap.MapTiles.Length; i++) {
+                if (!CurrentMap.MapTiles[i].IsBlockingMove) {
+                    // # Put the player on the index of the current position
+                    Player.Position = SadConsole.Helpers.GetPointFromIndex(i, CurrentMap.Width);
+                }
+            }
+            // Add the ViewPort sync component to the player entity
             Player.Components.Add(new EntityViewSyncComponent());
         }
     }

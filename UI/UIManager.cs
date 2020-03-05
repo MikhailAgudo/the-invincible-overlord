@@ -37,6 +37,9 @@ namespace the_invincible_overlord.UI {
             CreateConsoles();
             CreateMapWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Game Map");
 
+            // # Start the game with camera on player
+            CenterOnActor(GameLoop.World.Player);
+
             MessageLog = new MessageLogWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Message Log");
             Children.Add(MessageLog);
             MessageLog.Show();
@@ -122,20 +125,32 @@ namespace the_invincible_overlord.UI {
                 SadConsole.Settings.ToggleFullScreen();
             }
 
+            // Undo command
+            if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Z)) {
+                GameLoop.CommandManager.UndoMoveActorBy();
+                CenterOnActor(GameLoop.World.Player);
+            }
+
+            // Repeat last command
+            if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.X)) {
+                GameLoop.CommandManager.RedoMoveActorBy();
+                CenterOnActor(GameLoop.World.Player);
+            }
+
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.W)) {
-                GameLoop.World.Player.MoveBy(new Point(0, -1));
+                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, -1));
                 CenterOnActor(GameLoop.World.Player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.S)) {
-                GameLoop.World.Player.MoveBy(new Point(0, 1));
+                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(0, 1));
                 CenterOnActor(GameLoop.World.Player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.A)) {
-                GameLoop.World.Player.MoveBy(new Point(-1, 0));
+                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(-1, 0));
                 CenterOnActor(GameLoop.World.Player);
             }
             else if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.D)) {
-                GameLoop.World.Player.MoveBy(new Point(1, 0));
+                GameLoop.CommandManager.MoveActorBy(GameLoop.World.Player, new Point(1, 0));
                 CenterOnActor(GameLoop.World.Player);
             }
         }
