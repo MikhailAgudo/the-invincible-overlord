@@ -35,12 +35,8 @@ namespace the_invincible_overlord.UI {
 
         public void Init() {
             CreateConsoles();
-            CreateMapWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Game Map");
 
-            // # Start the game with camera on player
-            CenterOnActor(GameLoop.World.Player);
-
-            MessageLog = new MessageLogWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Message Log");
+            MessageLog = new MessageLogWindow(GameLoop.GameWidth, GameLoop.GameHeight / 2, "Message Log");
             Children.Add(MessageLog);
             MessageLog.Show();
             MessageLog.Position = new Point(0, GameLoop.GameHeight / 2);
@@ -70,14 +66,20 @@ namespace the_invincible_overlord.UI {
             MessageLog.Add("Testing 69");
             MessageLog.Add("Testing 420");
             MessageLog.Add("Testing 420 blazeit");
+
+            // # Load the map into the MapConsole
+            LoadMap(GameLoop.World.CurrentMap);
+
+            // # With the MapConsole ready, build the window
+            CreateMapWindow(GameLoop.GameWidth / 2, GameLoop.GameHeight / 2, "Game Map");
+            UseMouse = true;
+
+            // # Start the game with camera on player
+            CenterOnActor(GameLoop.World.Player);
         }
 
         public void CreateConsoles() {
-            MapConsole = new ScrollingConsole(GameLoop.World.CurrentMap.Width, 
-                GameLoop.World.CurrentMap.Height, 
-                Global.FontDefault, 
-                new Rectangle(0, 0, GameLoop.GameWidth, GameLoop.GameHeight), 
-                GameLoop.World.CurrentMap.MapTiles);
+            MapConsole = new ScrollingConsole(GameLoop.GameWidth, GameLoop.GameHeight);
         }
 
         public void CreateMapWindow(int width, int height, string title) {
@@ -116,6 +118,47 @@ namespace the_invincible_overlord.UI {
 
             // # Without this, the window will never be visible on screen
             MapWindow.Show();
+        }
+
+        private void LoadMap(Map map) {
+            // # Load the map's tiles into the console
+            MapConsole = new ScrollingConsole(GameLoop.World.CurrentMap.Width,
+                GameLoop.World.CurrentMap.Height,
+                Global.FontDefault,
+                new Rectangle(0, 0, GameLoop.GameWidth, GameLoop.GameHeight),
+                map.MapTiles
+                );
+
+            // # Then sync all of the map's entities
+            SyncMapEntities(map);
+        }
+
+        private void SyncMapEntities(Map map) {
+            // # Add the entire list of entities found in World.CurrentMap's Entities SpatialMap to the MapConsole, so they can be onscreen
+            // # Remove all entities from the console first
+            MapConsole.Children.Clear();
+
+            // # Then put all of the entities in bulk
+            foreach(Entities.Entity entity in map.Entities.Items) {
+                // # the entity in SpatialMap is an Item, and ISpatial Maps doesn't care what's in it they're just called Items
+                MapConsole.Children.Add(entity);
+            }
+
+            // # This portion means: If a monster is killed, it needs to disappear from both Map and MapConsole
+            // ## The SpatialMap event tells the program to update MapConsole every time there is an entity removed (and added) in the map
+            // # "Subscribe"s to the Entities ItemAdded listener, so we can keep our MapConsole entities in sync
+            map.Entities.ItemAdded += OnMapEntityAdded;
+
+            // # "Subscribe"s to the Entities ItemRemoved listener, so we can keep our MapConsole entities in sync
+            map.Entities.ItemRemoved += OnMapEntityRemoved;
+        }
+
+        public void OnMapEntityRemoved(object sender, GoRogue.ItemEventArgs<Entities.Entity> args) {
+            MapConsole.Children.Remove(args.Item);
+        }
+
+        public void OnMapEntityAdded(object sender, GoRogue.ItemEventArgs<Entities.Entity> args) {
+            MapConsole.Children.Add(args.Item);
         }
 
         private void CheckKeyboard() {

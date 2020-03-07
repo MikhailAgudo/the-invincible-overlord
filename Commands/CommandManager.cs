@@ -87,17 +87,44 @@ namespace the_invincible_overlord.Commands {
             int blocks = 0;
             if (hits > 0) {
                 attackMessage.AppendFormat("scoring {0} hits.", hits);
-                defenseMessage.AppendFormat("{0} attacks {1}, ", attacker.Name, defender.Name);
+                defenseMessage.AppendFormat("{0} defends and rolls: ", defender.Name);
+
+                for (int dice = 0; dice < defender.Defense; dice++) {
+                    int diceOutcome = Dice.Roll("1d100");
+                    if (diceOutcome <= defender.DefenseChance) {
+                        blocks++;
+                    }
+                }
+                defenseMessage.AppendFormat("resulting in {0} blocks.", blocks);
+            }
+            else {
+                attackMessage.Append("and misses completely!");
             }
 
-            for (int dice = 0; dice < attacker.Attack; dice++) {
-                int diceOutcome = Dice.Roll("1d100");
-                if (diceOutcome <= attacker.AttackChance) {
-                    hits++;
+            return blocks;
+        }
+
+        private static void ResolveDamage(Entities.Actor defender, int damage) {
+            if(damage > 0) {
+                defender.Health -= damage;
+                GameLoop.UIManager.MessageLog.Add($"{defender.Name} was hit for {damage} damage.");
+                if (defender.Health <= 0) {
+                    ResolveDeath(defender);
                 }
             }
+            else {
+                GameLoop.UIManager.MessageLog.Add($"{defender.Name} blocked all damage!");
+            }
+        }
 
-            return hits;
+        private static void ResolveDeath(Entities.Actor defender) {
+            GameLoop.World.CurrentMap.Remove(defender);
+            if (defender is Entities.Player) {
+                GameLoop.UIManager.MessageLog.Add($"{defender.Name} was killed.");
+            }
+            else if (defender is Entities.Monster) {
+                GameLoop.UIManager.MessageLog.Add($"{defender.Name} died and dropped {defender.Gold} gold coins.");
+            }
         }
     }
 }

@@ -4,9 +4,14 @@ using Entity = SadConsole.Entities.Entity;
 using Microsoft.Xna.Framework;
 
 namespace the_invincible_overlord.Entities {
-    class Actor : Entity {
+    public abstract class Actor : Entities.Entity {
         private int _health;
         private int _maxHealth;
+        private int _attack;
+        private int _attackChance;
+        private int _defense;
+        private int _defenseChance;
+        private int _gold;
 
         public int Health {
             get => _health;
@@ -20,9 +25,39 @@ namespace the_invincible_overlord.Entities {
                 _maxHealth = value;
             }
         }
+        public int Attack {
+            get => _attack;
+            set {
+                _attack = value;
+            }
+        }
+        public int AttackChance {
+            get => _attackChance;
+            set {
+                _attackChance = value;
+            }
+        }
+        public int Defense {
+            get => _defense;
+            set {
+                _defense = value;
+            }
+        }
+        public int DefenseChance {
+            get => _defenseChance;
+            set {
+                _defenseChance = value;
+            }
+        }
+        public int Gold {
+            get => _gold;
+            set {
+                _gold = value;
+            }
+        }
 
         protected Actor(Color foreground, Color background, int glyph, int width=1, int height=1)
-            : base(width, height) {
+            : base(foreground, background, glyph, width, height) {
             this.Animation.CurrentFrame[0].Foreground = foreground;
             this.Animation.CurrentFrame[0].Background = background;
             this.Animation.CurrentFrame[0].Glyph = glyph;

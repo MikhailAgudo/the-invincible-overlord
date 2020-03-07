@@ -51,12 +51,13 @@ namespace the_invincible_overlord {
 
         public T GetEntityAt<T>(Point location) where T : Entities.Entity {
             // # Checks if a certain type of entity is at a location in the manager's list of entities
-            // # and if it is, return that entity
+            // # and if it does exist, return that entity
             // # T is a placeholder variable for the type of object the entity is i.e. it can be anything
             // ## T is called a Generic
             // # The reason for this is, what if we had a Hero class, Monster class and Player class?
             // ## We'd need to create functions for all 3 types
             // ## Meanwhile, T allows us to use any of those types with only 1 method. Epic
+            // ## "where T : Entities.Entity" ensures that T is constrained to a specific type
             return Entities.GetItems(location).OfType<T>().FirstOrDefault();
         }
 
@@ -77,6 +78,10 @@ namespace the_invincible_overlord {
         }
 
         public void OnEntityMoved(object sender, Entities.Entity.EntityMovedEventArgs args) {
+            // # Called when an event fires off a message, in this case it should be an entity
+            // ## It sends off both the object "sender" and the arguments with it "args"
+            // # The method takes the sending entity and updates its position in the Entities SpatialMap
+            // # It is necessary to keep Map in sync with SpatialMap
             Entities.Move(args.Entity as Entities.Entity, args.Entity.Position);
         }
     }

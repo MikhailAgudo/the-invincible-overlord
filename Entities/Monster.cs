@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SadConsole;
+using Microsoft.Xna.Framework;
 
 namespace the_invincible_overlord.Entities {
-    class Monster {
+    class Monster : Actor {
+        public Monster(Color foreground, Color background) : base(foreground, background, 'M') {
+
+        }
     }
 }
